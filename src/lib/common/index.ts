@@ -14,10 +14,10 @@ export async function fetchWithProgress(
   let reader = response.body!.getReader();
 
   let lengthHeader = response.headers.get("Content-Length");
-  if (!lengthHeader) {
-    throw new Error(`No Content-Length header from ${url}`);
+  let contentLength = 1;
+  if (lengthHeader) {
+    contentLength = parseInt(lengthHeader);
   }
-  let contentLength = parseInt(lengthHeader);
 
   let receivedLength = 0;
   let chunks = [];
@@ -30,8 +30,8 @@ export async function fetchWithProgress(
     if (value) {
       chunks.push(value);
       receivedLength += value.length;
-
-      setProgress((100.0 * receivedLength) / contentLength);
+      const progress = Math.max(50, (100.0 * receivedLength) / contentLength);
+      setProgress(progress);
     }
   }
 
