@@ -29,6 +29,8 @@ export async function fetchWithProgress(
 
     if (value) {
       chunks.push(value);
+      receivedLength += value.length;
+
       setProgress((100.0 * receivedLength) / contentLength);
     }
   }
