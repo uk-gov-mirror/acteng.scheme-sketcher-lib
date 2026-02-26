@@ -32,10 +32,10 @@ export const mode: Writable<Mode> = writable({ mode: "list" });
 export const featureProps: Writable<FeatureProps<any>> = writable({});
 
 // Used to share the function currently required to finish drawing a feature
-export const finishCurrentFeature: Writable<Function> = writable(() => {});
+export const finishCurrentFeature: Writable<Function> = writable(() => { });
 
 // Used to share the function currently required to cancel drawing a feature
-export const cancelCurrentFeature: Writable<Function> = writable(() => {});
+export const cancelCurrentFeature: Writable<Function> = writable(() => { });
 
 // All feature IDs must:
 //
@@ -100,17 +100,21 @@ function loadUserSettings(): UserSettings {
     streetViewImagery: "google",
   };
 
-  // Be paranoid when loading from local storage, and only copy over valid items
-  try {
-    let x = JSON.parse(window.localStorage.getItem("userSettings") || "{}");
-    if (isStreetViewImagery(x.streetViewImagery)) {
-      settings.streetViewImagery = x.streetViewImagery;
+  if (window != undefined) {
+    // Be paranoid when loading from local storage, and only copy over valid items
+    try {
+      let x = JSON.parse(window.localStorage.getItem("userSettings") || "{}");
+      if (isStreetViewImagery(x.streetViewImagery)) {
+        settings.streetViewImagery = x.streetViewImagery;
+      }
+    } catch (error) {
+      console.log(`Couldn't parse userSettings from local storage: ${error}`);
     }
-  } catch (error) {
-    console.log(`Couldn't parse userSettings from local storage: ${error}`);
+    // The cast is necessary, because of streetViewImagery looking like just a string
+    return settings as UserSettings;
   }
-  // The cast is necessary, because of streetViewImagery looking like just a string
-  return settings as UserSettings;
+
+  return { streetViewImagery: "google" };
 }
 
 export function emptySchemes<F, S>(cfg: Config<F, S>): Schemes<F, S> {
