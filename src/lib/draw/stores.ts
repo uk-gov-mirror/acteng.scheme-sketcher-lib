@@ -100,6 +100,8 @@ function loadUserSettings(): UserSettings {
     streetViewImagery: "google",
   };
 
+  console.log("testing 1212");
+
   if (window != undefined) {
     // Be paranoid when loading from local storage, and only copy over valid items
     try {
