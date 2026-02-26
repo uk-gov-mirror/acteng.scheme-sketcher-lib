@@ -91,8 +91,11 @@ export function setPrecision(pt: Position): Position {
 
 export const userSettings: Writable<UserSettings> =
   writable(loadUserSettings());
-userSettings.subscribe((value) =>
-  window.localStorage.setItem("userSettings", JSON.stringify(value)),
+userSettings.subscribe((value) => {
+  if (window) {
+    window.localStorage.setItem("userSettings", JSON.stringify(value))
+  }
+}
 );
 
 function loadUserSettings(): UserSettings {
