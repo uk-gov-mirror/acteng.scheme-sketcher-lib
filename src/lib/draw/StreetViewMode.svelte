@@ -1,41 +1,39 @@
 <script lang="ts" generics="F, S">
-  import { HelpButton, StreetViewHelp, StreetViewTool } from "$lib/common";
-  import { map, type Config } from "$lib/config";
-  import { mode, userSettings } from "$lib/draw/stores";
-  import { ButtonGroup, DefaultButton, Radio } from "govuk-svelte";
-  import FixedButtonGroup from "./FixedButtonGroup.svelte";
-  import TinyRadio from "./TinyRadio.svelte";
+  import { StreetViewHelp, StreetViewTool } from "$lib/common";
+  import { IconButton } from "govuk-svelte";
+  import streetViewIcon from "$lib/assets/street_view.svg";
+  import { mode } from "$lib/draw/stores";
+
+  import { type Config, map } from "$lib/config";
 
   export let cfg: Config<F, S>;
 
-  let enabled = true;
-  $: if (!enabled) {
-    mode.set({ mode: "list" });
+  let enabled = false;
+  function toggleEnabled() {
+    enabled = !enabled;
   }
+
+  $: $mode = enabled ? { mode: "list" } : $mode;
 </script>
 
-<StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
+<div class="street-view">
+  <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
-<div style="display: flex">
-  <TinyRadio
-    choices={[
-      ["google", "Google Street View"],
-      ["bing", "Bing Streetside"],
-    ]}
-    bind:value={$userSettings.streetViewImagery}
-  />
-
-  <div style="margin-left: auto">
-    <FixedButtonGroup>
-      <DefaultButton
-        on:click={() => (enabled = false)}
-        style="margin-bottom: 0px"
-      >
-        Finish
-      </DefaultButton>
-      <HelpButton>
-        <StreetViewHelp />
-      </HelpButton>
-    </FixedButtonGroup>
-  </div>
+  <IconButton on:click={toggleEnabled}>
+    <img src={streetViewIcon} alt="StreetView" />
+    StreetView
+  </IconButton>
+  <StreetViewHelp />
 </div>
+
+<style>
+  .street-view {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 90%;
+    background-color: white;
+    border: 1px solid black;
+    padding: 16px;
+  }
+</style>

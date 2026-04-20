@@ -1,8 +1,7 @@
 <script lang="ts" generics="F, S">
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
-  import { userSettings } from "$lib/draw/stores";
-  import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
   import type { Map, MapMouseEvent } from "maplibre-gl";
+  import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
   import { onDestroy } from "svelte";
   import StreetViewHelp from "./StreetViewHelp.svelte";
 
@@ -54,17 +53,6 @@
     }
     let lon = e.lngLat.lng;
     let lat = e.lngLat.lat;
-    if ($userSettings.streetViewImagery == "google") {
-      window.open(
-        `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
-        "_blank",
-      );
-    } else if ($userSettings.streetViewImagery == "bing") {
-      window.open(
-        `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
-        "_blank",
-      );
-    }
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -82,15 +70,6 @@
     <SecondaryButton on:click={() => (enabled = false)}>
       Disable Street View
     </SecondaryButton>
-
-    <Radio
-      label="Source"
-      choices={[
-        ["google", "Google Street View"],
-        ["bing", "Bing Streetside"],
-      ]}
-      bind:value={$userSettings.streetViewImagery}
-    />
 
     <CollapsibleCard label="Help">
       <StreetViewHelp />
