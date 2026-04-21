@@ -53,6 +53,9 @@
     }
     let lon = e.lngLat.lng;
     let lat = e.lngLat.lat;
+
+    
+    console.log(`lon - ${lon}, lat - ${lat}`)
   }
 
   function onKeyDown(e: KeyboardEvent) {
