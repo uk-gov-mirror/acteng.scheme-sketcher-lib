@@ -16,24 +16,31 @@
   $: $mode = enabled ? { mode: "list" } : $mode;
 </script>
 
-<div class="street-view">
+<div class="street-view {enabled ? "enabled" : ""}">
   <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
   <IconButton on:click={toggleEnabled}>
     <img src={streetViewIcon} alt="StreetView" />
     StreetView
   </IconButton>
-  <StreetViewHelp />
+
+  {#if enabled}
+   <StreetViewHelp />
+  {/if}
 </div>
 
 <style>
   .street-view {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 90%;
+    bottom: 40px;
+    left: 50px;
+    width: 150px;
     background-color: white;
     border: 1px solid black;
     padding: 16px;
+  }
+
+  .street-view.enabled {
+    width: 365px;
   }
 </style>
