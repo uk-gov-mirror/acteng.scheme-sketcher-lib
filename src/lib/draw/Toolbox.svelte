@@ -100,8 +100,6 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     <SplitRouteMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "set-image"}
     <ImageMode />
-  {:else if $mode.mode == "streetview"}
-    <StreetViewMode {cfg} />
   {/if}
 </div>
 
