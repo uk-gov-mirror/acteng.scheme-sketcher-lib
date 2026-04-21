@@ -11,12 +11,11 @@
   let enabled = false;
   function toggleEnabled() {
     enabled = !enabled;
+    $mode = enabled ? { mode: "streetview" } : { mode: "list" };
   }
-
-  $: $mode = enabled ? { mode: "list" } : $mode;
 </script>
 
-<div class="street-view {enabled ? "enabled" : ""}">
+<div class="street-view {enabled ? 'enabled' : ''}">
   <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
   <IconButton on:click={toggleEnabled}>
@@ -25,7 +24,7 @@
   </IconButton>
 
   {#if enabled}
-   <StreetViewHelp />
+    <StreetViewHelp />
   {/if}
 </div>
 

@@ -16,6 +16,7 @@
     if (!map) {
       return;
     }
+    console.log("streeview booting up");
     map.on("click", onClick);
     map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
 
@@ -30,6 +31,7 @@
 
   function off() {
     if (map) {
+      console.log("streeview closing down");
       map.off("click", onClick);
       map.getCanvas().style.cursor = "inherit";
 
@@ -54,8 +56,7 @@
     let lon = e.lngLat.lng;
     let lat = e.lngLat.lat;
 
-    
-    console.log(`lon - ${lon}, lat - ${lat}`)
+    console.log(`lon - ${lon}, lat - ${lat}`);
   }
 
   function onKeyDown(e: KeyboardEvent) {
