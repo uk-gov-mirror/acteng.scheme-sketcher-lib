@@ -23,7 +23,6 @@
   export let finish: () => void;
   export let cancel: () => void;
   export let editingExisting: boolean;
-  export let showControls = true;
 
   onDestroy(() => {
     $waypoints = [];

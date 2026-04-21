@@ -18,7 +18,6 @@
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
-  export let showControls = true;
 
   onMount(() => {
     $waypoints = [];
@@ -62,4 +61,4 @@
   }
 </script>
 
-<RouteControls {finish} cancel={onFailure} editingExisting={false} {showControls} />
+<RouteControls {finish} cancel={onFailure} editingExisting={false} />
