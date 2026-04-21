@@ -23,6 +23,7 @@
   export let finish: () => void;
   export let cancel: () => void;
   export let editingExisting: boolean;
+  export let showControls = true;
 
   onDestroy(() => {
     $waypoints = [];
@@ -269,107 +270,111 @@
   }
 </script>
 
-<div style="display: flex">
-  <div style="display: flex; flex-direction: row">
-    <TinyRadio
-      style="flex-direction: column; border-right: 1px solid black"
-      choices={[
-        ["snap", "Snap to roads"],
-        ["free", "Draw anywhere"],
-      ]}
-      value={snapMode ? "snap" : "free"}
-      on:change={toggleSnap}
-    />
+{#if showControls}
+  <div style="display: flex">
+    <div style="display: flex; flex-direction: row">
+      <TinyRadio
+        style="flex-direction: column; border-right: 1px solid black"
+        choices={[
+          ["snap", "Snap to roads"],
+          ["free", "Draw anywhere"],
+        ]}
+        value={snapMode ? "snap" : "free"}
+        on:change={toggleSnap}
+      />
 
-    <TinyRadio
-      style="flex-direction: column; margin-left: 8px"
-      choices={[
-        ["append-start", "Extend from start"],
-        ["append-end", "Extend from end"],
-        ["adjust", "Adjust middle points"],
-      ]}
-      bind:value={drawMode}
-    />
+      <TinyRadio
+        style="flex-direction: column; margin-left: 8px"
+        choices={[
+          ["append-start", "Extend from start"],
+          ["append-end", "Extend from end"],
+          ["adjust", "Adjust middle points"],
+        ]}
+        bind:value={drawMode}
+      />
+    </div>
+
+    <div style="margin-left: auto">
+      <FixedButtonGroup>
+        <DefaultButton
+          on:click={finish}
+          disabled={$waypoints.length < 2}
+          style="margin-bottom: 0px"
+        >
+          Finish
+        </DefaultButton>
+        <SecondaryButton
+          disabled={undoStates.length == 0}
+          on:click={undo}
+          noBottomMargin
+        >
+          {#if undoStates.length == 0}
+            Undo
+          {:else}
+            Undo ({undoStates.length})
+          {/if}
+        </SecondaryButton>
+        <SecondaryButton on:click={cancel} noBottomMargin>
+          Cancel
+        </SecondaryButton>
+        <HelpButton>
+          <ul>
+            <li>
+              <b>Click</b>
+              the map to add new points, while extending from the start or end
+            </li>
+            <li>
+              <b>Click and drag</b>
+              any point to move it
+            </li>
+            <li>
+              <b>Click</b>
+              a waypoint to toggle snapping
+            </li>
+            <li>
+              <b>Right click</b>
+              a waypoint to delete it
+            </li>
+          </ul>
+
+          <p>Keyboard shortcuts:</p>
+          <ul>
+            <li>
+              <b>1</b>
+              to extend from start
+            </li>
+            <li>
+              <b>2</b>
+              to extend from end
+            </li>
+            <li>
+              <b>3</b>
+              to drag middle points
+            </li>
+            <li>
+              <b>s</b>
+              to switch between snapping to roads and drawing anywhere
+            </li>
+            <li>
+              <b>Control+Z</b>
+              to undo your last change
+            </li>
+            <li>
+              <b>Enter</b>
+              or
+              <b>Escape</b>
+              to finish
+            </li>
+            <li>
+              From the main mode, <b>2</b>
+              to draw a new route
+            </li>
+          </ul>
+        </HelpButton>
+      </FixedButtonGroup>
+    </div>
   </div>
-
-  <div style="margin-left: auto">
-    <FixedButtonGroup>
-      <DefaultButton
-        on:click={finish}
-        disabled={$waypoints.length < 2}
-        style="margin-bottom: 0px"
-      >
-        Finish
-      </DefaultButton>
-      <SecondaryButton
-        disabled={undoStates.length == 0}
-        on:click={undo}
-        noBottomMargin
-      >
-        {#if undoStates.length == 0}
-          Undo
-        {:else}
-          Undo ({undoStates.length})
-        {/if}
-      </SecondaryButton>
-      <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>
-      <HelpButton>
-        <ul>
-          <li>
-            <b>Click</b>
-            the map to add new points, while extending from the start or end
-          </li>
-          <li>
-            <b>Click and drag</b>
-            any point to move it
-          </li>
-          <li>
-            <b>Click</b>
-            a waypoint to toggle snapping
-          </li>
-          <li>
-            <b>Right click</b>
-            a waypoint to delete it
-          </li>
-        </ul>
-
-        <p>Keyboard shortcuts:</p>
-        <ul>
-          <li>
-            <b>1</b>
-            to extend from start
-          </li>
-          <li>
-            <b>2</b>
-            to extend from end
-          </li>
-          <li>
-            <b>3</b>
-            to drag middle points
-          </li>
-          <li>
-            <b>s</b>
-            to switch between snapping to roads and drawing anywhere
-          </li>
-          <li>
-            <b>Control+Z</b>
-            to undo your last change
-          </li>
-          <li>
-            <b>Enter</b>
-            or
-            <b>Escape</b>
-            to finish
-          </li>
-          <li>
-            From the main mode, <b>2</b>
-            to draw a new route
-          </li>
-        </ul>
-      </HelpButton>
-    </FixedButtonGroup>
-  </div>
-</div>
+{/if}
 
 <svelte:window on:keydown={keyDown} />
 
